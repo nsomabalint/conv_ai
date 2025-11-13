@@ -1,0 +1,97 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Bank Balance API",
+    "description": "Check bank account balance using PIN authentication. Returns account balance, currency, and account holder information.",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://your-username-balance-api.hf.space"
+    }
+  ],
+  "paths": {
+    "/api/balance": {
+      "post": {
+        "description": "Check account balance by providing a 4-digit PIN number",
+        "operationId": "check_bank_balance",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pin": {
+                    "type": "string",
+                    "description": "The 4-digit PIN number for the bank account",
+                    "pattern": "^[0-9]{4}$"
+                  }
+                },
+                "required": ["pin"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with balance information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Whether the request was successful"
+                    },
+                    "balance": {
+                      "type": "number",
+                      "description": "Account balance amount",
+                      "nullable": true
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "Currency code (USD, EUR, GBP, CAD, etc.)",
+                      "nullable": true
+                    },
+                    "account_name": {
+                      "type": "string",
+                      "description": "Name of the account holder",
+                      "nullable": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Status or error message",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid PIN format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {}
+  }
+}
