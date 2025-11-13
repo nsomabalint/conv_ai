@@ -2,6 +2,19 @@
 
 This repository contains conversational AI projects and tools, including a Rasa-based banking chatbot and a FastAPI balance checking service.
 
+## 🚀 Quick Start with GitHub Codespaces
+
+**The easiest way to run this project:**
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new)
+
+1. Click "Code" → "Create codespace"
+2. Wait for setup to complete (5-10 minutes)
+3. Run: `./start_chatbot.sh`
+4. Start chatting!
+
+Everything is pre-configured and ready to use. See [CODESPACES.md](CODESPACES.md) for detailed instructions.
+
 ## 📋 Project Structure
 
 ```
@@ -17,6 +30,17 @@ conv_ai/
 A simple demonstration chatbot built with Rasa that can check bank account balances through natural conversation. The chatbot queries the Bank Balance API using custom actions.
 
 ### Quick Start
+
+**Option 1: GitHub Codespaces (Easiest)**
+
+```bash
+# Everything is auto-installed!
+./start_chatbot.sh
+```
+
+See [CODESPACES.md](CODESPACES.md) for details.
+
+**Option 2: Local Setup**
 
 ```bash
 # 1. Install Rasa and dependencies
@@ -159,24 +183,26 @@ See [bank_api/README_API.md](bank_api/README_API.md) for detailed API documentat
 
 ## 🚀 Complete System Setup
 
-To run the complete banking chatbot system:
+**Easy Way (Codespaces or after setup):**
+```bash
+./start_chatbot.sh  # Starts everything automatically
+```
+
+**Manual Way (3 separate terminals):**
 
 1. **Terminal 1 - Bank API**:
    ```bash
-   cd bank_api
-   python app.py
+   ./start_api.sh
    ```
 
 2. **Terminal 2 - Rasa Actions**:
    ```bash
-   cd rasa_chatbot
-   rasa run actions
+   ./start_actions.sh
    ```
 
 3. **Terminal 3 - Rasa Chatbot**:
    ```bash
-   cd rasa_chatbot
-   rasa shell
+   ./start_rasa.sh
    ```
 
 ## 📚 Additional Resources

@@ -1,0 +1,37 @@
+{
+  "name": "Banking Chatbot Development",
+  "image": "mcr.microsoft.com/devcontainers/python:3.10",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
+      }
+    }
+  },
+  "forwardPorts": [7860, 5055, 5005],
+  "portsAttributes": {
+    "7860": {
+      "label": "Balance API",
+      "onAutoForward": "notify"
+    },
+    "5055": {
+      "label": "Rasa Actions",
+      "onAutoForward": "notify"
+    },
+    "5005": {
+      "label": "Rasa Server",
+      "onAutoForward": "silent"
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "remoteUser": "vscode"
+}

@@ -36,6 +36,12 @@ env/
 # Logs
 *.log
 server.log
+logs/
+
+# Rasa
+rasa_chatbot/models/
+rasa_chatbot/.rasa/
+rasa_chatbot/actions.log
 
 # OS
 .DS_Store
