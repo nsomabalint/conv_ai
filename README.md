@@ -75,57 +75,40 @@ See [rasa_chatbot/README.md](rasa_chatbot/README.md) for detailed setup instruct
 
 ## 🤖 LLM Chatbot System Prompt
 
-A complete system prompt for implementing the same banking chatbot using generative AI models (GPT-4, Claude, Gemini, etc.) with function/tool calling.
+A ready-to-use system prompt for creating the same banking chatbot using ChatGPT Custom GPTs or other LLM platforms.
 
 ### Quick Start
 
-```python
-import openai
+1. Open the file: `llm_chatbot_prompt/system_prompt.txt`
+2. Copy the entire contents
+3. Paste into your ChatGPT GPT instructions or LLM system prompt
+4. Configure the action/tool for the Balance API
 
-# Load system prompt
-with open('llm_chatbot_prompt/system_prompt.txt') as f:
-    system_prompt = f.read()
-
-# Use with your LLM API
-response = openai.ChatCompletion.create(
-    model="gpt-4",
-    messages=[
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": "Check my balance"}
-    ],
-    functions=[...] # Load from openai_function_definition.json
-)
-```
+That's it! No coding or training required.
 
 ### What's Included
 
-- **system_prompt.txt** - Complete system prompt with persona, capabilities, and guidelines
-- **openai_function_definition.json** - Function definition for OpenAI/compatible models
-- **anthropic_tool_definition.json** - Tool definition for Anthropic Claude
-- **api_integration.md** - Complete integration guide with code examples
-- **conversation_examples.md** - 8 detailed example conversations
+- **system_prompt.txt** - Complete instructions for the chatbot
+- **README.md** - Step-by-step guide for setting up with ChatGPT GPTs
 
 ### Features
 
-- 🎭 Same functionality as Rasa chatbot (balance check, hours, card blocking)
-- 🔧 Ready-to-use with GPT-4, Claude, Gemini, or compatible models
-- 📝 No training data required - just use the prompt
-- 🔗 Function calling for Balance API integration
-- 📚 Comprehensive documentation and examples
+- 🎭 Same functionality as Rasa chatbot
+- 📋 Just copy and paste - no coding needed
+- 🔧 Works with ChatGPT Custom GPTs
+- ⚡ Quick setup (minutes, not hours)
+- 🔗 Includes API action configuration for balance checking
 
-### LLM vs Rasa Comparison
+### Perfect For
 
-| Feature | LLM Prompt | Rasa |
-|---------|-----------|------|
-| Setup Time | Minutes | Hours |
-| Training Required | No | Yes |
-| Flexibility | High | Medium |
-| Cost | API fees | Free (self-hosted) |
-| Customization | Prompt editing | Code + data |
+- ChatGPT Custom GPTs
+- Claude Projects
+- Quick prototyping
+- Non-technical users
 
 ### Documentation
 
-See [llm_chatbot_prompt/README.md](llm_chatbot_prompt/README.md) for complete documentation, integration examples, and usage guide.
+See [llm_chatbot_prompt/README.md](llm_chatbot_prompt/README.md) for complete setup instructions with ChatGPT GPTs.
 
 ---
 

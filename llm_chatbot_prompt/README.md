@@ -1,148 +1,109 @@
-# LLM Banking Chatbot System Prompt
+# Banking Chatbot System Prompt for GPTs
 
-This folder contains everything you need to implement a banking chatbot using generative AI models (like GPT-4, Claude, Gemini, etc.) with function/tool calling capabilities.
+This folder contains a ready-to-use system prompt for creating a banking chatbot with ChatGPT or other LLM platforms.
 
-## 📁 Contents
+## 📄 File
 
-### Core Files
+**`system_prompt.txt`** - Copy this entire file and paste it as your GPT's instructions.
 
-- **`system_prompt.txt`** - The main system prompt defining the chatbot's personality, capabilities, and behavior guidelines
-- **`openai_function_definition.json`** - Function definition for OpenAI/compatible models
-- **`anthropic_tool_definition.json`** - Tool definition for Anthropic Claude models
-- **`api_integration.md`** - Complete guide for integrating with the Balance API, including code examples
-- **`conversation_examples.md`** - 8 detailed conversation examples showing expected behavior
+## 🎯 What This Chatbot Does
 
-## 🎯 Chatbot Capabilities
+1. **Check Account Balance** - Uses a custom action/tool to query balances with PIN
+2. **Provide Bank Opening Hours** - Shares static schedule information
+3. **Block Lost/Stolen Cards** - Provides card blocking assistance
 
-This system prompt enables the chatbot to:
+## 🚀 How to Use with ChatGPT GPTs
 
-1. **Check Account Balances** - Query balances using PIN authentication via API tool calling
-2. **Provide Bank Opening Hours** - Share static information about operating hours
-3. **Block Lost/Stolen Cards** - Assist customers with card blocking procedures
+### Step 1: Create a Custom GPT
 
-## 🚀 Quick Start
+1. Go to [chat.openai.com/gpts/editor](https://chat.openai.com/gpts/editor)
+2. Click "Create a GPT"
+3. Switch to "Configure" tab
 
-### Option 1: OpenAI (GPT-4, GPT-3.5)
+### Step 2: Add the System Prompt
 
-```python
-import openai
-import json
+1. Copy the entire contents of `system_prompt.txt`
+2. Paste it into the "Instructions" field
 
-# Load the system prompt
-with open('system_prompt.txt', 'r') as f:
-    system_prompt = f.read()
+### Step 3: Configure the Action (for Balance Check)
 
-# Load function definition
-with open('openai_function_definition.json', 'r') as f:
-    function_def = json.load(f)
+1. Click "Create new action"
+2. Set up the API endpoint to point to your Balance API:
+   - Server: `http://localhost:7860` (or your deployed API URL)
+   - Endpoint: `/api/balance`
+   - Method: POST
 
-# Create chat completion
-response = openai.ChatCompletion.create(
-    model="gpt-4",
-    messages=[
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": "Check my balance, PIN 1234"}
-    ],
-    functions=[function_def],
-    function_call="auto"
-)
+3. Add the schema:
+```json
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bank Balance API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7860"
+    }
+  ],
+  "paths": {
+    "/api/balance": {
+      "post": {
+        "operationId": "check_bank_balance",
+        "summary": "Check account balance with PIN",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pin": {
+                    "type": "string",
+                    "description": "4-digit PIN number"
+                  }
+                },
+                "required": ["pin"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Balance information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {"type": "boolean"},
+                    "balance": {"type": "number"},
+                    "currency": {"type": "string"},
+                    "account_name": {"type": "string"},
+                    "message": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 ```
 
-### Option 2: Anthropic (Claude)
+### Step 4: Name Your GPT
 
-```python
-import anthropic
-import json
+Give it a name like "Banking Assistant" or "Bank Helper Bot"
 
-# Load the system prompt
-with open('system_prompt.txt', 'r') as f:
-    system_prompt = f.read()
+### Step 5: Save and Test
 
-# Load tool definition
-with open('anthropic_tool_definition.json', 'r') as f:
-    tool_def = json.load(f)
+Click "Save" and start chatting with your banking bot!
 
-client = anthropic.Anthropic()
+## 🧪 Test PINs
 
-message = client.messages.create(
-    model="claude-3-5-sonnet-20241022",
-    max_tokens=1024,
-    system=system_prompt,
-    messages=[
-        {"role": "user", "content": "Check my balance, PIN 1234"}
-    ],
-    tools=[tool_def]
-)
-```
-
-## 📋 Prerequisites
-
-To use this chatbot system, you need:
-
-1. **An LLM API key** - OpenAI, Anthropic, or compatible provider
-2. **The Balance API running** - See `../bank_api/` for setup instructions
-3. **Function/tool calling support** - Your chosen model must support function calling
-
-## 🔧 Implementation Steps
-
-### Step 1: Set Up the Balance API
-
-```bash
-# Start the Balance API
-cd ../bank_api
-python app.py
-```
-
-The API will run on `http://localhost:7860`
-
-### Step 2: Choose Your LLM Provider
-
-Select one of the function/tool definitions:
-- `openai_function_definition.json` for OpenAI/compatible models
-- `anthropic_tool_definition.json` for Claude models
-
-### Step 3: Implement the Tool Callback
-
-Create a function that calls the Balance API when the LLM requests it:
-
-```python
-import requests
-
-def check_bank_balance(pin):
-    response = requests.post(
-        "http://localhost:7860/api/balance",
-        json={"pin": pin},
-        timeout=5
-    )
-    return response.json()
-```
-
-### Step 4: Handle the Conversation Loop
-
-Implement the function calling loop (see `api_integration.md` for complete examples).
-
-## 📚 Documentation
-
-### Detailed Files
-
-- **`system_prompt.txt`** - Read this to understand the chatbot's persona and guidelines
-- **`conversation_examples.md`** - Study 8 example conversations covering all scenarios
-- **`api_integration.md`** - Complete integration guide with Python and JavaScript examples
-
-### Key Features of the System Prompt
-
-✅ **Personality**: Friendly, professional, and helpful banking assistant
-✅ **Natural conversation**: Handles greetings, questions, and multi-turn dialogs
-✅ **Tool usage**: Clear guidance on when to call the balance checking tool
-✅ **Static responses**: Built-in knowledge for opening hours and card blocking
-✅ **Error handling**: Graceful handling of invalid PINs and API errors
-✅ **Security awareness**: Appropriate handling of sensitive information
-
-## 🧪 Testing
-
-### Test PINs
-
-Use these PINs to test the chatbot:
+Once your GPT is set up and the Balance API is running, test with these PINs:
 
 | PIN  | Balance    | Currency | Account Name     |
 |------|------------|----------|------------------|
@@ -152,103 +113,41 @@ Use these PINs to test the chatbot:
 | 3456 | 567.25     | USD      | Alice Williams   |
 | 7890 | 45,123.80  | CAD      | Charlie Brown    |
 
-### Test Scenarios
+## 💬 Example Conversations
 
-Try these conversation starters:
-- "Hello" (greeting)
-- "Check my balance" (balance inquiry)
-- "What are your opening hours?" (static info)
-- "I lost my card" (card blocking)
-- "Are you a bot?" (bot challenge)
+Try these:
+- "Hello"
+- "Check my balance" → provide PIN when asked
+- "What are your opening hours?"
+- "I lost my card"
 
-## 🔄 Comparison with Rasa Implementation
+## ⚙️ Prerequisites
 
-This LLM-based approach differs from the Rasa implementation in `../rasa_chatbot/`:
+**For balance checking to work**, you need:
 
-| Aspect | Rasa | LLM (This Implementation) |
-|--------|------|---------------------------|
-| **NLU** | Trained model | Pre-trained LLM |
-| **Training Data** | Required | Not required |
-| **Intent Classification** | Explicit | Implicit |
-| **Dialog Management** | Stories & Rules | Natural conversation |
-| **Flexibility** | Structured | Free-form |
-| **Setup Complexity** | Higher | Lower |
-| **Cost** | Free (self-hosted) | API costs |
-| **Customization** | Fine-grained | Prompt-based |
+1. The Balance API running (see `../bank_api/`)
+2. The API accessible from where your GPT runs (may need deployment for production)
 
-### When to Use LLM vs. Rasa
+**Note:** Opening hours and card blocking work without the API (they're static responses).
 
-**Use LLM (this implementation) when:**
-- You want quick setup without training
-- You need natural, flexible conversations
-- You're okay with API costs
-- You want easy updates (just change the prompt)
+## 🔗 Related
 
-**Use Rasa when:**
-- You need full control and customization
-- You want no ongoing API costs
-- You require on-premise deployment
-- You need strict conversation flows
+- **Balance API**: See `../bank_api/` for the FastAPI backend
+- **Rasa Alternative**: See `../rasa_chatbot/` for a traditional chatbot framework implementation
 
-## 🔐 Security Considerations
+## 📝 Customization
 
-⚠️ **This is a demonstration system**
+To modify the chatbot:
 
-For production use, implement:
-- Rate limiting on API calls
-- Request validation and sanitization
-- Encrypted PIN storage
-- Session management
-- Audit logging
-- OAuth2/JWT authentication
-- HTTPS only
-- PII data handling compliance
+1. Edit `system_prompt.txt`
+2. Change opening hours, phone numbers, or other static info
+3. Update the personality/tone section
+4. Copy the updated prompt to your GPT
 
-## 🎨 Customization
+## 🌐 Deployment
 
-### Modifying the Prompt
+For production use:
 
-To customize the chatbot:
-
-1. Edit `system_prompt.txt` to change personality or add capabilities
-2. Update function definitions if you add new tool-based features
-3. Add new static information (like FAQs, policies) directly in the prompt
-
-### Adding New Features
-
-To add a new feature:
-
-1. If it requires an API call → Add a new function/tool definition
-2. If it's static info → Add it to the system prompt under "Static Information"
-3. Update `conversation_examples.md` with new example dialogs
-
-## 📖 Further Reading
-
-- [OpenAI Function Calling Guide](https://platform.openai.com/docs/guides/function-calling)
-- [Anthropic Tool Use Guide](https://docs.anthropic.com/claude/docs/tool-use)
-- [Balance API Documentation](../bank_api/README_API.md)
-- [Rasa Implementation](../rasa_chatbot/README.md)
-
-## 💡 Tips for Best Results
-
-1. **Test thoroughly** with the provided test PINs
-2. **Study the examples** in `conversation_examples.md`
-3. **Handle errors gracefully** as shown in the system prompt
-4. **Keep context** across multi-turn conversations
-5. **Monitor token usage** to optimize costs
-6. **Log conversations** for quality improvement
-
-## 🤝 Contributing
-
-To improve this prompt:
-1. Test with various conversation patterns
-2. Note any edge cases or issues
-3. Update the system prompt accordingly
-4. Add new examples to `conversation_examples.md`
-
-## 📞 Support
-
-For questions about:
-- **This prompt system**: Review the documentation files
-- **The Balance API**: See `../bank_api/README_API.md`
-- **Rasa comparison**: See `../rasa_chatbot/README.md`
+1. Deploy the Balance API to a public URL (Hugging Face Spaces, Railway, etc.)
+2. Update the GPT action server URL to your deployed API
+3. Consider adding authentication to your API
