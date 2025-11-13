@@ -1,0 +1,46 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - check_balance
+  - provide_pin
+  - bot_challenge
+
+entities:
+  - pin
+
+slots:
+  pin:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: pin
+
+responses:
+  utter_greet:
+    - text: "Hello! I'm your banking assistant. How can I help you today?"
+    - text: "Hi there! Welcome to your banking assistant. What can I do for you?"
+
+  utter_goodbye:
+    - text: "Goodbye! Have a great day!"
+    - text: "See you later! Take care!"
+
+  utter_ask_pin:
+    - text: "Please provide your 4-digit PIN number to check your balance."
+    - text: "To check your balance, I'll need your 4-digit PIN."
+
+  utter_iamabot:
+    - text: "I am a banking bot, powered by Rasa. I can help you check your account balance!"
+
+  utter_help:
+    - text: "I can help you check your bank account balance. Just ask me to check your balance and provide your PIN when requested."
+
+  utter_invalid_pin:
+    - text: "That doesn't look like a valid PIN. Please provide a 4-digit number."
+
+actions:
+  - action_check_balance

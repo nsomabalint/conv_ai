@@ -1,0 +1,13 @@
+# Configuration for Rasa Core.
+# https://rasa.com/docs/rasa/custom-actions
+
+action_endpoint:
+  url: "http://localhost:5055/webhook"
+
+# Tracker store configuration
+# https://rasa.com/docs/rasa/tracker-stores
+
+#tracker_store:
+#  type: sql
+#  dialect: "sqlite"
+#  db: "rasa.db"

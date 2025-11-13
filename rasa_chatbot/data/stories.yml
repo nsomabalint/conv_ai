@@ -1,0 +1,38 @@
+version: "3.1"
+
+stories:
+- story: greet and check balance
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: check_balance
+  - action: utter_ask_pin
+  - intent: provide_pin
+  - action: action_check_balance
+
+- story: check balance directly
+  steps:
+  - intent: check_balance
+  - action: utter_ask_pin
+  - intent: provide_pin
+  - action: action_check_balance
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: greet and goodbye
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: check balance with greeting and goodbye
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: check_balance
+  - action: utter_ask_pin
+  - intent: provide_pin
+  - action: action_check_balance
+  - intent: goodbye
+  - action: utter_goodbye

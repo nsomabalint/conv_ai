@@ -1,0 +1,91 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - hey there
+    - hi there
+    - greetings
+    - hey bot
+
+- intent: goodbye
+  examples: |
+    - bye
+    - goodbye
+    - see you later
+    - see you
+    - talk to you later
+    - bye bye
+    - have a nice day
+    - catch you later
+    - thanks bye
+    - good night
+
+- intent: affirm
+  examples: |
+    - yes
+    - yeah
+    - yep
+    - sure
+    - absolutely
+    - correct
+    - that's right
+    - of course
+    - indeed
+    - affirmative
+
+- intent: deny
+  examples: |
+    - no
+    - nope
+    - never
+    - no way
+    - not really
+    - I don't think so
+    - no thanks
+    - negative
+    - not at all
+
+- intent: check_balance
+  examples: |
+    - check my balance
+    - what's my balance
+    - show my balance
+    - how much money do I have
+    - check account balance
+    - I want to know my balance
+    - can you check my balance
+    - tell me my balance
+    - balance inquiry
+    - show me my account balance
+    - what is my current balance
+    - balance check
+    - check balance please
+
+- intent: provide_pin
+  examples: |
+    - my pin is [1234](pin)
+    - [5678](pin)
+    - the pin is [9012](pin)
+    - it's [3456](pin)
+    - [7890](pin)
+    - my PIN number is [1234](pin)
+    - here is my pin [5678](pin)
+    - [1234](pin) is my pin
+    - pin [9012](pin)
+    - the PIN is [3456](pin)
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+    - who are you?
+    - what are you?
