@@ -8,6 +8,7 @@ This repository contains conversational AI projects and tools, including a Rasa-
 conv_ai/
 ├── bank_api/              # Bank Balance API (FastAPI)
 ├── rasa_chatbot/          # Rasa Banking Chatbot
+├── llm_chatbot_prompt/    # LLM/Generative AI System Prompt
 └── Conversational_AI.ipynb
 ```
 
@@ -69,6 +70,62 @@ Bot: Goodbye! Have a great day!
 ### Documentation
 
 See [rasa_chatbot/README.md](rasa_chatbot/README.md) for detailed setup instructions, conversation flows, and development guide.
+
+---
+
+## 🤖 LLM Chatbot System Prompt
+
+A complete system prompt for implementing the same banking chatbot using generative AI models (GPT-4, Claude, Gemini, etc.) with function/tool calling.
+
+### Quick Start
+
+```python
+import openai
+
+# Load system prompt
+with open('llm_chatbot_prompt/system_prompt.txt') as f:
+    system_prompt = f.read()
+
+# Use with your LLM API
+response = openai.ChatCompletion.create(
+    model="gpt-4",
+    messages=[
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": "Check my balance"}
+    ],
+    functions=[...] # Load from openai_function_definition.json
+)
+```
+
+### What's Included
+
+- **system_prompt.txt** - Complete system prompt with persona, capabilities, and guidelines
+- **openai_function_definition.json** - Function definition for OpenAI/compatible models
+- **anthropic_tool_definition.json** - Tool definition for Anthropic Claude
+- **api_integration.md** - Complete integration guide with code examples
+- **conversation_examples.md** - 8 detailed example conversations
+
+### Features
+
+- 🎭 Same functionality as Rasa chatbot (balance check, hours, card blocking)
+- 🔧 Ready-to-use with GPT-4, Claude, Gemini, or compatible models
+- 📝 No training data required - just use the prompt
+- 🔗 Function calling for Balance API integration
+- 📚 Comprehensive documentation and examples
+
+### LLM vs Rasa Comparison
+
+| Feature | LLM Prompt | Rasa |
+|---------|-----------|------|
+| Setup Time | Minutes | Hours |
+| Training Required | No | Yes |
+| Flexibility | High | Medium |
+| Cost | API fees | Free (self-hosted) |
+| Customization | Prompt editing | Code + data |
+
+### Documentation
+
+See [llm_chatbot_prompt/README.md](llm_chatbot_prompt/README.md) for complete documentation, integration examples, and usage guide.
 
 ---
 
@@ -143,6 +200,7 @@ To run the complete banking chatbot system:
 
 - [Conversational_AI.ipynb](Conversational_AI.ipynb) - Jupyter notebook with conversational AI examples
 - [rasa_chatbot/README.md](rasa_chatbot/README.md) - Detailed Rasa chatbot documentation
+- [llm_chatbot_prompt/README.md](llm_chatbot_prompt/README.md) - LLM system prompt and integration guide
 - [bank_api/README_API.md](bank_api/README_API.md) - API documentation and usage examples
 
 ## 🎯 Use Cases

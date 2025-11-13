@@ -1,0 +1,15 @@
+{
+  "name": "check_bank_balance",
+  "description": "Check a customer's bank account balance using their 4-digit PIN number. Returns the account balance, currency type, and account holder name. Use this function when the customer provides their PIN after requesting a balance check.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "pin": {
+        "type": "string",
+        "description": "The 4-digit PIN number for the bank account. Must be exactly 4 digits.",
+        "pattern": "^[0-9]{4}$"
+      }
+    },
+    "required": ["pin"]
+  }
+}
