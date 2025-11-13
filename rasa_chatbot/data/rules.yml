@@ -15,3 +15,13 @@ rules:
   steps:
   - intent: check_balance
   - action: utter_ask_pin
+
+- rule: Provide opening hours when asked
+  steps:
+  - intent: ask_opening_hours
+  - action: utter_opening_hours
+
+- rule: Block card when requested
+  steps:
+  - intent: block_card
+  - action: utter_card_blocked

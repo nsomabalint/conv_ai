@@ -60,8 +60,10 @@ Bot: Goodbye! Have a great day!
 - 🗣️ Natural language understanding with Rasa NLU
 - 🔢 PIN number entity extraction
 - 🔗 Custom action integration with Balance API
-- 📝 Simple intents: greet, goodbye, check_balance, provide_pin
+- 📝 Simple intents: greet, goodbye, check_balance, provide_pin, ask_opening_hours, block_card
 - 🎯 Rules and stories for consistent responses
+- ⏰ Bank opening hours information
+- 🔒 Card blocking functionality
 - ⚠️ Error handling for invalid PINs and connection issues
 
 ### Documentation

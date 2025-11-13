@@ -3,10 +3,10 @@ version: "3.1"
 intents:
   - greet
   - goodbye
-  - affirm
-  - deny
   - check_balance
   - provide_pin
+  - ask_opening_hours
+  - block_card
   - bot_challenge
 
 entities:
@@ -34,10 +34,18 @@ responses:
     - text: "To check your balance, I'll need your 4-digit PIN."
 
   utter_iamabot:
-    - text: "I am a banking bot, powered by Rasa. I can help you check your account balance!"
+    - text: "I am a banking bot, powered by Rasa. I can help you check your account balance, provide opening hours, and assist with card blocking!"
+
+  utter_opening_hours:
+    - text: "Our bank is open Monday to Friday from 9:00 AM to 5:00 PM, and Saturday from 9:00 AM to 1:00 PM. We are closed on Sundays and public holidays."
+    - text: "Banking hours:\n• Monday - Friday: 9:00 AM - 5:00 PM\n• Saturday: 9:00 AM - 1:00 PM\n• Sunday: Closed"
+
+  utter_card_blocked:
+    - text: "Your card has been blocked successfully for security purposes. Please visit your nearest branch with valid ID to get a replacement card, or call our customer service at 1-800-BANK-HELP."
+    - text: "Card blocked! For your security, your card is now deactivated. To get a new card, please visit any branch with your ID or contact us at 1-800-BANK-HELP."
 
   utter_help:
-    - text: "I can help you check your bank account balance. Just ask me to check your balance and provide your PIN when requested."
+    - text: "I can help you with:\n• Checking your account balance\n• Bank opening hours\n• Blocking your card\nWhat would you like to do?"
 
   utter_invalid_pin:
     - text: "That doesn't look like a valid PIN. Please provide a 4-digit number."

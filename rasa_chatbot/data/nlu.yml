@@ -27,30 +27,38 @@ nlu:
     - thanks bye
     - good night
 
-- intent: affirm
+- intent: ask_opening_hours
   examples: |
-    - yes
-    - yeah
-    - yep
-    - sure
-    - absolutely
-    - correct
-    - that's right
-    - of course
-    - indeed
-    - affirmative
+    - what are your opening hours
+    - when are you open
+    - what time do you open
+    - what time do you close
+    - bank opening hours
+    - are you open today
+    - what are the bank hours
+    - when is the bank open
+    - opening times
+    - business hours
+    - when can I visit the bank
+    - what time does the bank open
+    - what time does the bank close
 
-- intent: deny
+- intent: block_card
   examples: |
-    - no
-    - nope
-    - never
-    - no way
-    - not really
-    - I don't think so
-    - no thanks
-    - negative
-    - not at all
+    - block my card
+    - I want to block my card
+    - my card is lost
+    - I lost my card
+    - card stolen
+    - block my credit card
+    - deactivate my card
+    - freeze my card
+    - disable my card
+    - my card was stolen
+    - I need to block my card
+    - please block my card
+    - card blocking
+    - stop my card
 
 - intent: check_balance
   examples: |

@@ -5,8 +5,10 @@ A simple English banking chatbot built with Rasa that demonstrates the integrati
 ## Features
 
 - **Simple conversational flow** with greetings, balance checks, and goodbyes
-- **Custom action** that queries the Bank Balance API
+- **Custom action** that queries the Bank Balance API for account balances
 - **Entity extraction** for PIN numbers
+- **Bank opening hours** information (static response)
+- **Card blocking** functionality (static response)
 - **Multiple intents** for natural conversation
 - **Rules and stories** for consistent responses
 
@@ -35,8 +37,8 @@ rasa_chatbot/
 - **goodbye**: Saying goodbye
 - **check_balance**: Request to check account balance
 - **provide_pin**: Providing PIN number
-- **affirm**: Affirmative responses
-- **deny**: Negative responses
+- **ask_opening_hours**: Ask about bank opening hours
+- **block_card**: Request to block a card
 - **bot_challenge**: Asking if the bot is a bot
 
 ## Prerequisites
@@ -102,7 +104,9 @@ Or to run with debugging:
 rasa shell --debug
 ```
 
-## Example Conversation
+## Example Conversations
+
+### Balance Check
 
 ```
 Your input ->  hello
@@ -117,6 +121,32 @@ Your current balance is: 15420.50 USD
 
 Your input ->  thanks, bye
 Goodbye! Have a great day!
+```
+
+### Opening Hours
+
+```
+Your input ->  hi
+Hello! I'm your banking assistant. How can I help you today?
+
+Your input ->  what are your opening hours?
+Our bank is open Monday to Friday from 9:00 AM to 5:00 PM, and Saturday from 9:00 AM to 1:00 PM. We are closed on Sundays and public holidays.
+
+Your input ->  thanks
+Goodbye! Have a great day!
+```
+
+### Card Blocking
+
+```
+Your input ->  hello
+Hi there! Welcome to your banking assistant. What can I do for you?
+
+Your input ->  I lost my card, please block it
+Card blocked! For your security, your card is now deactivated. To get a new card, please visit any branch with your ID or contact us at 1-800-BANK-HELP.
+
+Your input ->  bye
+See you later! Take care!
 ```
 
 ## Test PINs

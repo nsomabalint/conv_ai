@@ -36,3 +36,34 @@ stories:
   - action: action_check_balance
   - intent: goodbye
   - action: utter_goodbye
+
+- story: ask opening hours with greeting
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_opening_hours
+  - action: utter_opening_hours
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: block card with greeting
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: block_card
+  - action: utter_card_blocked
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: multiple queries
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_opening_hours
+  - action: utter_opening_hours
+  - intent: check_balance
+  - action: utter_ask_pin
+  - intent: provide_pin
+  - action: action_check_balance
+  - intent: goodbye
+  - action: utter_goodbye
