@@ -17,12 +17,8 @@
       }
     }
   },
-  "forwardPorts": [7860, 5055, 5005],
+  "forwardPorts": [5055, 5005],
   "portsAttributes": {
-    "7860": {
-      "label": "Balance API",
-      "onAutoForward": "notify"
-    },
     "5055": {
       "label": "Rasa Actions",
       "onAutoForward": "notify"

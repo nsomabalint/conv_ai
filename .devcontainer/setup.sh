@@ -6,9 +6,12 @@ echo "Setting up Banking Chatbot Development Environment"
 echo "================================================"
 echo ""
 
-# Install Balance API dependencies
-echo "📦 Installing Balance API dependencies..."
-pip install --quiet -r bank_api/requirements.txt
+# Create .env file from example if it doesn't exist
+if [ ! -f .env ]; then
+    echo "📝 Creating .env configuration file..."
+    cp .env.example .env
+    echo "⚠️  Please edit .env and set your Hugging Face Spaces API URL!"
+fi
 
 # Install Rasa and action server dependencies
 echo "📦 Installing Rasa..."
@@ -28,11 +31,16 @@ echo "================================================"
 echo "✅ Setup complete!"
 echo "================================================"
 echo ""
-echo "To run the banking chatbot:"
-echo "  ./start_chatbot.sh"
+echo "⚠️  IMPORTANT: Configure your Balance API URL"
+echo ""
+echo "1. Edit the .env file:"
+echo "   - Set BALANCE_API_URL to your Hugging Face Spaces URL"
+echo "   - Example: BALANCE_API_URL=https://your-username-balance-api.hf.space"
+echo ""
+echo "2. Run the chatbot:"
+echo "   ./start_chatbot.sh"
 echo ""
 echo "Or run components individually:"
-echo "  ./start_api.sh       - Start Balance API (port 7860)"
 echo "  ./start_actions.sh   - Start Rasa Actions (port 5055)"
 echo "  ./start_rasa.sh      - Start Rasa chatbot"
 echo ""

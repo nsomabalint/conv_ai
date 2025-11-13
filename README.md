@@ -8,10 +8,12 @@ This repository contains conversational AI projects and tools, including a Rasa-
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new)
 
-1. Click "Code" → "Create codespace"
-2. Wait for setup to complete (5-10 minutes)
-3. Run: `./start_chatbot.sh`
-4. Start chatting!
+1. Deploy the Balance API to Hugging Face Spaces (see `bank_api/`)
+2. Click "Code" → "Create codespace"
+3. Wait for setup to complete (5-10 minutes)
+4. Edit `.env` and set your HF Spaces URL
+5. Run: `./start_chatbot.sh`
+6. Start chatting!
 
 Everything is pre-configured and ready to use. See [CODESPACES.md](CODESPACES.md) for detailed instructions.
 

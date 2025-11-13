@@ -2,6 +2,11 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 import requests
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 class ActionCheckBalance(Action):
@@ -29,8 +34,9 @@ class ActionCheckBalance(Action):
             dispatcher.utter_message(text="Invalid PIN format. Please provide a 4-digit PIN number.")
             return []
 
-        # Call the Balance API
-        api_url = "http://localhost:7860/api/balance"
+        # Get API URL from environment variable or use default
+        base_url = os.getenv("BALANCE_API_URL", "http://localhost:7860")
+        api_url = f"{base_url}/api/balance"
 
         try:
             response = requests.post(
@@ -64,7 +70,7 @@ class ActionCheckBalance(Action):
 
         except requests.exceptions.ConnectionError:
             dispatcher.utter_message(
-                text="I'm having trouble connecting to the banking system. Please make sure the Balance API is running on http://localhost:7860"
+                text=f"I'm having trouble connecting to the banking system. Please check if the Balance API is accessible at {base_url}"
             )
         except requests.exceptions.Timeout:
             dispatcher.utter_message(
