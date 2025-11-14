@@ -8,6 +8,8 @@ intents:
   - ask_opening_hours
   - block_card
   - bot_challenge
+  - out_of_scope
+  - nlu_fallback
 
 entities:
   - pin
@@ -49,6 +51,10 @@ responses:
 
   utter_invalid_pin:
     - text: "That doesn't look like a valid PIN. Please provide a 4-digit number."
+
+  utter_out_of_scope:
+    - text: "I'm sorry, I can only help with checking your balance, providing opening hours, and blocking your card. For other banking services, please call 1-800-BANK-HELP or visit our website."
+    - text: "I don't handle that type of request. I can help you check your balance, tell you our opening hours, or block your card. For anything else, please contact customer service at 1-800-BANK-HELP."
 
 actions:
   - action_check_balance

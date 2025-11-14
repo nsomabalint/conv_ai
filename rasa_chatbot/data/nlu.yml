@@ -97,3 +97,31 @@ nlu:
     - am I talking to a human?
     - who are you?
     - what are you?
+
+- intent: out_of_scope
+  examples: |
+    - I want to invest
+    - I want to invest some money
+    - I want to invest 100 dollars
+    - how can I invest
+    - investment options
+    - tell me about investments
+    - I want to buy stocks
+    - can I invest in stocks
+    - what are the best investments
+    - I want to open a savings account
+    - I need a loan
+    - how do I apply for a loan
+    - mortgage rates
+    - can I get a credit card
+    - I want to transfer money
+    - international transfer
+    - wire transfer
+    - exchange rates
+    - what's the exchange rate
+    - I want to open an account
+    - how do I close my account
+    - update my address
+    - change my phone number
+    - I forgot my password
+    - reset my online banking password

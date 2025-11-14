@@ -25,3 +25,13 @@ rules:
   steps:
   - intent: block_card
   - action: utter_card_blocked
+
+- rule: Handle out of scope requests
+  steps:
+  - intent: out_of_scope
+  - action: utter_out_of_scope
+
+- rule: Handle low confidence predictions
+  steps:
+  - intent: nlu_fallback
+  - action: utter_out_of_scope
