@@ -37,19 +37,14 @@ rasa_chatbot/
 
 ## Setup in GitHub Codespaces
 
-Prerequisites: Deploy the Balance API to Hugging Face Spaces first.
-
 1. Open repository in Codespaces
 2. Wait for automatic setup (installs dependencies, trains model)
-3. Configure API URL:
-   ```bash
-   nano .env
-   # Set BALANCE_API_URL=https://nsomabalint-bank-api.hf.space
-   ```
-4. Run the bot:
+3. Run the bot:
    ```bash
    ./start_chatbot.sh
    ```
+
+The bot is configured to use the deployed Balance API at https://nsomabalint-bank-api.hf.space
 
 ## Local Setup
 
@@ -59,18 +54,12 @@ Prerequisites: Deploy the Balance API to Hugging Face Spaces first.
    pip install -r actions/requirements-actions.txt
    ```
 
-2. Configure environment:
-   ```bash
-   cp .env.example .env
-   # Edit .env and set BALANCE_API_URL
-   ```
-
-3. Train the model:
+2. Train the model:
    ```bash
    rasa train
    ```
 
-4. Run components (in separate terminals):
+3. Run components (in separate terminals):
    ```bash
    # Terminal 1: Action server
    rasa run actions
@@ -78,6 +67,8 @@ Prerequisites: Deploy the Balance API to Hugging Face Spaces first.
    # Terminal 2: Chatbot
    rasa shell
    ```
+
+The action server is configured to use the Balance API at https://nsomabalint-bank-api.hf.space
 
 ## How It Works
 

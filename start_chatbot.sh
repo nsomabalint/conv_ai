@@ -6,24 +6,6 @@ echo "Starting Banking Chatbot System"
 echo "================================================"
 echo ""
 
-# Check if .env file exists
-if [ ! -f .env ]; then
-    echo "⚠️  ERROR: .env file not found!"
-    echo ""
-    echo "Please create a .env file with your Balance API URL:"
-    echo "  cp .env.example .env"
-    echo "  # Then edit .env and set BALANCE_API_URL"
-    echo ""
-    exit 1
-fi
-
-# Check if API URL is configured
-if grep -q "localhost:7860" .env; then
-    echo "⚠️  WARNING: Balance API URL is set to localhost"
-    echo "   Make sure to update .env with your HF Spaces URL"
-    echo ""
-fi
-
 # Check if we're in a terminal that supports background jobs
 if [ -t 0 ]; then
     echo "Starting Rasa Action Server..."

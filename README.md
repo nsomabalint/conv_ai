@@ -35,12 +35,10 @@ Ready-to-use system prompt for ChatGPT Custom GPTs or similar LLM platforms.
 
 For the Rasa chatbot:
 
-1. Deploy Balance API to Hugging Face Spaces (see `bank_api/`)
-2. Open this repository in GitHub Codespaces
-3. Configure API URL in `.env` file
-4. Run `./start_chatbot.sh`
+1. Open this repository in GitHub Codespaces
+2. Run `./start_chatbot.sh`
 
-The Codespaces environment automatically installs dependencies and trains the model.
+The Codespaces environment automatically installs dependencies and trains the model. The bot is configured to use the Balance API at https://nsomabalint-bank-api.hf.space
 
 ## Repository Structure
 
