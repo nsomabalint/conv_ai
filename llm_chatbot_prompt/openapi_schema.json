@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://your-username-balance-api.hf.space"
+      "url": "https://nsomabalint-bank-api.hf.space"
     }
   ],
   "paths": {
