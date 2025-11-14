@@ -44,7 +44,7 @@ Prerequisites: Deploy the Balance API to Hugging Face Spaces first.
 3. Configure API URL:
    ```bash
    nano .env
-   # Set BALANCE_API_URL=https://your-username-balance-api.hf.space
+   # Set BALANCE_API_URL=https://nsomabalint-bank-api.hf.space
    ```
 4. Run the bot:
    ```bash
