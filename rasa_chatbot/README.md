@@ -1,157 +1,229 @@
 # Banking Chatbot with Rasa
 
-A simple English banking chatbot built with Rasa that demonstrates the integration with the Bank Balance API. The chatbot can check account balances by querying the custom API through Rasa custom actions.
+This chatbot demonstrates building a conversational AI assistant with Rasa that integrates with an external API. The bot can check bank account balances, provide opening hours, and assist with card blocking.
 
-## Features
+## What This Bot Does
 
-- **Simple conversational flow** with greetings, balance checks, and goodbyes
-- **Custom action** that queries the Bank Balance API for account balances
-- **Entity extraction** for PIN numbers
-- **Bank opening hours** information (static response)
-- **Card blocking** functionality (static response)
-- **Multiple intents** for natural conversation
-- **Rules and stories** for consistent responses
+- Check account balance by calling the Balance API with PIN authentication
+- Provide bank opening hours (static information)
+- Assist with blocking lost or stolen cards (static information)
+
+## Architecture
+
+The bot uses three components:
+
+1. **Rasa NLU** - Understands user messages and extracts intents/entities
+2. **Rasa Core** - Manages conversation flow based on stories and rules
+3. **Action Server** - Executes custom Python code to call the Balance API
+
+The action server connects to a deployed Balance API (on Hugging Face Spaces) to retrieve actual balance information.
 
 ## Project Structure
 
 ```
 rasa_chatbot/
 ├── actions/
-│   ├── __init__.py
-│   ├── actions.py              # Custom action to query Balance API
+│   ├── actions.py              # Custom action for API calls
 │   └── requirements-actions.txt
 ├── data/
-│   ├── nlu.yml                 # NLU training data
-│   ├── rules.yml               # Conversation rules
-│   └── stories.yml             # Training stories
-├── config.yml                  # Pipeline and policy configuration
-├── domain.yml                  # Domain definition
-├── credentials.yml             # Channel credentials
-├── endpoints.yml               # Action server endpoint
-└── requirements.txt
+│   ├── nlu.yml                 # Training examples for intents
+│   ├── rules.yml               # Simple intent-to-action mappings
+│   └── stories.yml             # Multi-turn conversation examples
+├── config.yml                  # NLU pipeline and dialogue policies
+├── domain.yml                  # Intents, entities, slots, responses, actions
+├── credentials.yml             # Channel configurations
+└── endpoints.yml               # Action server connection
 ```
 
-## Intents
+## Setup in GitHub Codespaces
 
-- **greet**: Greeting the bot
-- **goodbye**: Saying goodbye
-- **check_balance**: Request to check account balance
-- **provide_pin**: Providing PIN number
-- **ask_opening_hours**: Ask about bank opening hours
-- **block_card**: Request to block a card
-- **bot_challenge**: Asking if the bot is a bot
+Prerequisites: Deploy the Balance API to Hugging Face Spaces first.
 
-## Prerequisites
+1. Open repository in Codespaces
+2. Wait for automatic setup (installs dependencies, trains model)
+3. Configure API URL:
+   ```bash
+   nano .env
+   # Set BALANCE_API_URL=https://your-username-balance-api.hf.space
+   ```
+4. Run the bot:
+   ```bash
+   ./start_chatbot.sh
+   ```
 
-1. Python 3.8 or higher
-2. The Bank Balance API running on `http://localhost:7860`
+## Local Setup
 
-## Setup and Installation
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   pip install -r actions/requirements-actions.txt
+   ```
 
-### 1. Install Rasa
+2. Configure environment:
+   ```bash
+   cp .env.example .env
+   # Edit .env and set BALANCE_API_URL
+   ```
 
-```bash
-cd rasa_chatbot
-pip install -r requirements.txt
+3. Train the model:
+   ```bash
+   rasa train
+   ```
+
+4. Run components (in separate terminals):
+   ```bash
+   # Terminal 1: Action server
+   rasa run actions
+
+   # Terminal 2: Chatbot
+   rasa shell
+   ```
+
+## How It Works
+
+### Intent Recognition
+
+The `data/nlu.yml` file defines intents with training examples:
+
+```yaml
+- intent: check_balance
+  examples: |
+    - check my balance
+    - what's my balance
+    - how much money do I have
+
+- intent: provide_pin
+  examples: |
+    - my pin is [1234](pin)
+    - [5678](pin)
+    - the pin is [9012](pin)
 ```
 
-### 2. Install Action Server Dependencies
+Entity annotations like `[1234](pin)` train the model to extract PIN numbers from user messages.
 
-```bash
-pip install -r actions/requirements-actions.txt
+### Conversation Flow
+
+Rules in `data/rules.yml` define simple mappings:
+
+```yaml
+- rule: Ask for PIN when checking balance
+  steps:
+  - intent: check_balance
+  - action: utter_ask_pin
+
+- rule: Provide opening hours
+  steps:
+  - intent: ask_opening_hours
+  - action: utter_opening_hours
 ```
 
-### 3. Train the Model
+Stories in `data/stories.yml` define multi-turn conversations:
 
-```bash
-rasa train
+```yaml
+- story: Check balance flow
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: check_balance
+  - action: utter_ask_pin
+  - intent: provide_pin
+  - action: action_check_balance
+  - intent: goodbye
+  - action: utter_goodbye
 ```
 
-This will create a trained model in the `models/` directory.
+### Custom Action for API Integration
 
-## Running the Chatbot
+The `actions/actions.py` file contains the balance check action:
 
-You need to run three separate components:
+```python
+class ActionCheckBalance(Action):
+    def name(self) -> Text:
+        return "action_check_balance"
 
-### Terminal 1: Start the Bank Balance API
+    def run(self, dispatcher, tracker, domain):
+        pin = tracker.get_slot("pin")
+        base_url = os.getenv("BALANCE_API_URL")
+        api_url = f"{base_url}/api/balance"
 
-```bash
-cd ../bank_api
-python app.py
+        response = requests.post(api_url, json={"pin": pin})
+        data = response.json()
+
+        if data.get("success"):
+            message = f"Account holder: {data['account_name']}\n"
+            message += f"Balance: {data['balance']} {data['currency']}"
+            dispatcher.utter_message(text=message)
+        else:
+            dispatcher.utter_message(text="Invalid PIN")
+
+        return []
 ```
 
-The API should be running on `http://localhost:7860`
+The action retrieves the PIN from the conversation slot, calls the external API, and returns the formatted response to the user.
 
-### Terminal 2: Start the Rasa Action Server
+### Domain Configuration
 
-```bash
-cd rasa_chatbot
-rasa run actions
+The `domain.yml` file defines all components:
+
+```yaml
+intents:
+  - greet
+  - goodbye
+  - check_balance
+  - provide_pin
+  - ask_opening_hours
+  - block_card
+  - bot_challenge
+
+entities:
+  - pin
+
+slots:
+  pin:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: pin
+
+responses:
+  utter_greet:
+    - text: "Hello! I'm your banking assistant."
+
+  utter_ask_pin:
+    - text: "Please provide your 4-digit PIN."
+
+actions:
+  - action_check_balance
 ```
 
-This starts the action server on `http://localhost:5055`
+## Configuration Details
 
-### Terminal 3: Start the Rasa Server
+The `config.yml` defines the NLU pipeline and dialogue policies:
 
-```bash
-cd rasa_chatbot
-rasa shell
+```yaml
+pipeline:
+  - name: WhitespaceTokenizer
+  - name: RegexFeaturizer
+  - name: CountVectorsFeaturizer
+  - name: DIETClassifier
+    epochs: 100
+
+policies:
+  - name: MemoizationPolicy
+  - name: RulePolicy
+  - name: TEDPolicy
+    max_history: 5
+    epochs: 100
 ```
 
-Or to run with debugging:
-
-```bash
-rasa shell --debug
-```
-
-## Example Conversations
-
-### Balance Check
-
-```
-Your input ->  hello
-Hello! I'm your banking assistant. How can I help you today?
-
-Your input ->  I want to check my balance
-Please provide your 4-digit PIN number to check your balance.
-
-Your input ->  1234
-Account holder: John Doe
-Your current balance is: 15420.50 USD
-
-Your input ->  thanks, bye
-Goodbye! Have a great day!
-```
-
-### Opening Hours
-
-```
-Your input ->  hi
-Hello! I'm your banking assistant. How can I help you today?
-
-Your input ->  what are your opening hours?
-Our bank is open Monday to Friday from 9:00 AM to 5:00 PM, and Saturday from 9:00 AM to 1:00 PM. We are closed on Sundays and public holidays.
-
-Your input ->  thanks
-Goodbye! Have a great day!
-```
-
-### Card Blocking
-
-```
-Your input ->  hello
-Hi there! Welcome to your banking assistant. What can I do for you?
-
-Your input ->  I lost my card, please block it
-Card blocked! For your security, your card is now deactivated. To get a new card, please visit any branch with your ID or contact us at 1-800-BANK-HELP.
-
-Your input ->  bye
-See you later! Take care!
-```
+- **DIETClassifier**: Handles both intent classification and entity extraction
+- **RulePolicy**: Executes rule-based conversations
+- **TEDPolicy**: Learns patterns from story examples
 
 ## Test PINs
 
-Use these PINs to test the chatbot:
+The Balance API includes test accounts:
 
 | PIN  | Balance    | Currency | Account Name     |
 |------|------------|----------|------------------|
@@ -161,99 +233,38 @@ Use these PINs to test the chatbot:
 | 3456 | 567.25     | USD      | Alice Williams   |
 | 7890 | 45,123.80  | CAD      | Charlie Brown    |
 
-## Custom Action Details
+## Example Conversations
 
-The `action_check_balance` custom action:
-
-1. Extracts the PIN from the conversation slot
-2. Validates the PIN format (4 digits)
-3. Makes a POST request to the Balance API
-4. Formats and returns the balance information to the user
-5. Handles errors gracefully (invalid PIN, connection errors, timeouts)
-
-## Configuration
-
-### API Endpoint
-
-The Balance API endpoint is configured in `actions/actions.py`:
-
-```python
-api_url = "http://localhost:7860/api/balance"
+**Balance Check:**
+```
+User: hello
+Bot: Hello! I'm your banking assistant. How can I help you today?
+User: check my balance
+Bot: Please provide your 4-digit PIN number.
+User: 1234
+Bot: Account holder: John Doe
+     Your current balance is: 15,420.50 USD
 ```
 
-To change the API location, edit this line in the `ActionCheckBalance` class.
-
-### Action Server
-
-The action server endpoint is configured in `endpoints.yml`:
-
-```yaml
-action_endpoint:
-  url: "http://localhost:5055/webhook"
+**Opening Hours:**
+```
+User: when are you open?
+Bot: Monday-Friday: 9:00 AM - 5:00 PM
+     Saturday: 9:00 AM - 1:00 PM
+     Sunday: Closed
 ```
 
-## Troubleshooting
-
-### "I'm having trouble connecting to the banking system"
-
-- Make sure the Balance API is running on port 7860
-- Check that you can access `http://localhost:7860/health`
-
-### Action Server Not Found
-
-- Ensure the action server is running with `rasa run actions`
-- Check that `endpoints.yml` has the correct action server URL
-
-### Model Not Found
-
-- Train the model first with `rasa train`
-- Check that a model file exists in the `models/` directory
-
-## Development
-
-### Adding New Intents
-
-1. Add the intent to `domain.yml`
-2. Add training examples to `data/nlu.yml`
-3. Add stories/rules to `data/stories.yml` or `data/rules.yml`
-4. Retrain with `rasa train`
-
-### Modifying the Custom Action
-
-Edit `actions/actions.py` and restart the action server:
-
-```bash
-# Stop the action server (Ctrl+C)
-rasa run actions
+**Card Blocking:**
+```
+User: I lost my card
+Bot: Your card has been blocked. Please visit a branch with ID
+     or call 1-800-BANK-HELP.
 ```
 
-## Interactive Learning
+## Useful Commands
 
-You can use Rasa's interactive learning to improve the bot:
-
-```bash
-rasa interactive
-```
-
-This allows you to chat with the bot and correct its behavior in real-time.
-
-## Testing
-
-Test the NLU model:
-
-```bash
-rasa test nlu
-```
-
-Test the dialogue model:
-
-```bash
-rasa test
-```
-
-## Notes
-
-- This is a **demonstration chatbot** for learning Rasa
-- The chatbot uses simple rules and stories for predictable behavior
-- For production use, add more training data, implement form actions for PIN collection, and add proper authentication
-- The Balance API should be replaced with a real banking system in production
+- `rasa train` - Train the model with current data
+- `rasa shell` - Talk to the bot in terminal
+- `rasa run actions` - Start the action server
+- `rasa data validate` - Check training data for errors
+- `rasa test` - Evaluate model performance
